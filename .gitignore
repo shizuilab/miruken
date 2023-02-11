@@ -1,1 +1,7 @@
 /python/lib/waveshare_epd/__pycache__/*
+/nodejs/node_modules
+/nodejs/dist
+/nodejs/log
+/nodejs/.env
+/python/pic/output.bmp
+/python/pic/qrcode.bmp
