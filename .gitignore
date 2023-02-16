@@ -1,4 +1,5 @@
 /python/lib/waveshare_epd/__pycache__/*
+/python/__pycache__/*
 /nodejs/node_modules
 /nodejs/dist
 /nodejs/log
