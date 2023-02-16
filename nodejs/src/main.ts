@@ -3,9 +3,11 @@ const log4js = require('log4js');
 const logger = log4js.getLogger('system');
 
 import { getActiveNode } from 'symbol-node-util';
-import { Address, RepositoryFactoryHttp, NetworkType } from "symbol-sdk";
+import { Account, Address, RepositoryFactoryHttp, NetworkType, TransactionRepository, TransactionType, TransactionGroup, Transaction } from "symbol-sdk";
 import {IncomingWebhook } from '@slack/webhook';
-import { PythonShell } from 'python-shell';
+import { Display } from './display';
+
+let txRepo: TransactionRepository;
 
 interface Status {
   loading: boolean
@@ -37,9 +39,7 @@ log4js.configure({
 });
 
 /** =========== */
-const targetRawAddress: string = 'TDKIFJKKDGLJMCPN35LL7YILCLU5L3PE4FJASQY';
 const webhook_url: string | undefined = process.env.SLACK_WEBHOOK_URL;
-const python_path: string = process.env.PYTHON_PATH ?? '/usr/bin/python3';
 /** =========== */
 // @ts-ignore
 let listener:any;
@@ -47,6 +47,7 @@ let network_type: number = NetworkType.TEST_NET;
 if(process.env.NETWORK_TYPE === 'mainnet'){
   network_type = NetworkType.MAIN_NET;
 }
+const account: Account = Account.createFromPrivateKey(process.env.PRIVATE_KEY ?? '', network_type);
 
 /**
   * ログ
@@ -61,53 +62,17 @@ const listenerNewBlock = ():void => {
   setTimeout(listenerNewBlock, 50000);
 }
 
-const python_call = ():void => {
-  let options = {
-    pythonPath: python_path,
-    pythonOptions: ['-u'], 
-    scriptPath: '/home/pi/src/miruken/python',
-    // scriptPath: '/home/pi/src/miruken/python',
-    args: ['文字入れテストです', "address"]
-  };
-  PythonShell.run('main.py', options, function (err,data) {
-    if (err) throw err;
-    console.log(data)
-    console.log('finished');
-    status.loading = false
-  });
-}
 
 (async()=>{
-  
-  python_call();
 
-  const targetAddress = Address.createFromRawAddress(targetRawAddress);
   const node = await getActiveNode(network_type);
   const repo = new RepositoryFactoryHttp(node);
-  // リスナー生成
-  // listener = repo.createListener();
-  // // リスナーオープン
-  // listener.open().then(() => {
-  //   log('listner open')
-  //   listener.newBlock().subscribe((block:any) => {
-  //     log(block)
-  //     console.log(status);
-  //     if(!status.loading){
-  //       python_call();
-  //     }
+  txRepo = repo.createTransactionRepository();
+  const display = new Display();
 
-  //     // newBlock(block);
-  //   });
+  if(!display.status){
+    display.call("on loading", account.address);
+  }
 
-  //   listener.webSocket.onclose = function(){
-  //     console.log("listener onclose");
-  //     if(webhook_url){
-  //       const webhook = new IncomingWebhook(webhook_url);
-  //       webhook.send({
-  //         text: "listener onclose",
-  //       });
-  //     }
-  //   }
-  //   listenerNewBlock();
-  // });
+
 })()
