@@ -9,7 +9,7 @@ if os.path.exists(libdir):
     sys.path.append(libdir)
 
 import logging
-from waveshare_epd import epd4in2
+from waveshare_epd import epd4in2bc
 import time
 from PIL import Image,ImageDraw,ImageFont
 import traceback
@@ -17,14 +17,15 @@ import traceback
 logging.basicConfig(level=logging.DEBUG)
 logging.info("epd4in2 Demo")
 
-epd = epd4in2.EPD()
+epd = epd4in2bc.EPD()
 logging.info("init")
 epd.init()
 
 def show_image(filename):
   logging.info("3.read bmp file")
   Himage = Image.open(os.path.join(picdir, filename))
-  epd.display(epd.getbuffer(Himage))
+  HRYimage = Image.open(os.path.join(picdir, filename))
+  epd.display(epd.getbuffer(Himage),epd.getbuffer(HRYimage))
 
 def display_clear():
   
