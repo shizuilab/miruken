@@ -48,6 +48,11 @@ sudo apt-get install wiringpi
 wget https://project-downloads.drogon.net/wiringpi-latest.deb
 sudo dpkg -i wiringpi-latest.deb
 gpio -v
+
+#wingpiは非推奨になったので下記を実行 参考：https://qiita.com/ma2shita/items/b11045717333bcd79d15
+
+raspi-gpio get
+raspi-gpio get 6 | awk -v RS=" " -F "=" -v k="level" '$1==k {print $2}'
 ```
 
 # Nodejsインストール
