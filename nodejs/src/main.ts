@@ -62,6 +62,52 @@ const listenerNewBlock = ():void => {
   setTimeout(listenerNewBlock, 50000);
 }
 
+// const newBlock = (block:any):void => {
+//   console.log(block);
+//   if(!status.loading){
+//     python_call("message", targetAddress);
+//   }
+// }
+
+// const getTransfers = async (block:any) => {
+//   try {
+//     const tx = await txRepo.search({
+//       height: block.height.compact(),
+//       group: TransactionGroup.Confirmed
+//     }).toPromise();
+//     //@ts-ignore
+//     log('tx: '+tx.data.length);
+//     //@ts-ignore
+//     await parseTxs(tx.data);
+//   } catch (error) {
+//     console.error(error);
+//   }
+// }
+
+// const parseTxs = async (txs:Array<Transaction>) => {
+//   for(const tx of txs){
+//     //アグリゲートトランザクション判定
+//     if(tx.type === TransactionType.AGGREGATE_COMPLETE || tx.type === TransactionType.AGGREGATE_BONDED){
+//       //アグリゲートの場合、内部トランザクションを再取得
+//       const reTx = await txRepo.getTransaction(
+//         tx.transactionInfo.hash,
+//         TransactionGroup.Confirmed
+//       ).toPromise();
+//       console.log("== aggregateTx ==")
+//       //この関数を再帰的に呼び出し
+//       parseTxs(reTx.innerTransactions);  //再帰呼び出し
+//       console.log("-----------------")
+//     }else {
+//       log("== tx ==");
+//       log(tx);
+//       // if(tx.mosaics !== undefined){
+//       //   tx.mosaics.forEach(mosaic => {
+//       //     log(mosaic);
+//       //   });
+//       // }
+//     }
+//   }
+// }
 
 (async()=>{
 
@@ -74,5 +120,24 @@ const listenerNewBlock = ():void => {
     display.call("on loading", account.address);
   }
 
+  // // リスナー生成
+  // listener = repo.createListener();
+  // // リスナーオープン
+  // listener.open().then(() => {
+  //   log('listner open')
+  //   listener.newBlock().subscribe((block:any) => {
+  //     getTransfers(block);
+  //   });
 
+  //   listener.webSocket.onclose = function(){
+  //     console.log("listener onclose");
+  //     if(webhook_url){
+  //       const webhook = new IncomingWebhook(webhook_url);
+  //       webhook.send({
+  //         text: "listener onclose",
+  //       });
+  //     }
+  //   }
+  //   listenerNewBlock();
+  // });
 })()
