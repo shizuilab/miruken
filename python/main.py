@@ -1,8 +1,11 @@
 #!/usr/bin/python
 # -*- coding:utf-8 -*-
 import os
+import subprocess
 
 picdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'pic')
+voicedir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'voice')
+
 # 画像処理
 from PIL import Image, ImageFont, ImageDraw
 import cv2
@@ -29,7 +32,6 @@ message = args[1]
 # QRコードに表示するアドレス
 address = args[2]
 
-picdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'pic')
 qr_size = (80, 80)
 # 画像サイズ（ top, bottom, left, right）
 image_size = (5, (300-qr_size[0])-5, (400-qr_size[1])-5, 5)
@@ -65,6 +67,7 @@ for item in images:
     epd.show_image(item)
     time.sleep(1)
 
+subprocess.Popen(['mpg321', os.path.join(voicedir) + '/level_up.mp3'])
 
 # アドレスQRの生成
 qr_put = qr_create(address)
