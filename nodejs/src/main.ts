@@ -8,6 +8,7 @@ import {IncomingWebhook } from '@slack/webhook';
 import { Display } from './display';
 
 const display = new Display();
+const exprolerUrl = process.env.EXPLORER_URL ?? 'https://testnet.symbol.fyi/';
 
 let txRepo: TransactionRepository;
 
@@ -85,8 +86,9 @@ const parseTxs = async (txs:any) => {
     }else {
       log("== tx ==");
       if(tx.recipientAddress.plain() === account.address.plain()){
-        log(tx.signer.address.plain());
-          display.call(tx.message.payload, tx.signer.address);
+        // log(tx);
+        const link = `${exprolerUrl}/transactions/${tx.transactionInfo.hash}`;
+        display.call(tx.message.payload, link);
       }
     }
   }

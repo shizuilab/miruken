@@ -11,13 +11,13 @@ export class Display {
 
   public constructor() {}
 
-  public call = (message: string, address: Address):void => {
+  public call = (message: string, link: string):void => {
     this._status = true;
     let options = {
       pythonPath: this._pythonPath,
       pythonOptions: ['-u'], 
       scriptPath: this._scriptPath,
-      args: [message, address.plain()]
+      args: [message, link]
     };
     PythonShell.run('main.py', options, ((err,data) => {
       if (err) throw err;
