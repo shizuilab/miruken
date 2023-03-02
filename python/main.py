@@ -21,7 +21,7 @@ if len(sys.argv) < 3:
   print("Usage: argv erro")
   sys.exit(1)
   
-images = ['1.bmp', '2.bmp', '3.bmp', '4.bmp', '5.bmp']
+images = ['1.bmp', '3.bmp', '5.bmp']
 
 logging.basicConfig(level=logging.DEBUG)
 
