@@ -83,3 +83,10 @@ sudo reboot
 node -v
 npm -v
 ```
+
+## pythonライブラリインストール
+
+```
+cd python
+pip install -r requirements.txt
+```

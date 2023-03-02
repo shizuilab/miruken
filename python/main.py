@@ -28,61 +28,77 @@ logging.basicConfig(level=logging.DEBUG)
 args = sys.argv
 
 # 画像に入れる文章
-message = args[1]
+text = args[1]
+
 # QRコードに表示するアドレス
 address = args[2]
 
-qr_size = (80, 80)
-# 画像サイズ（ top, bottom, left, right）
-image_size = (5, (300-qr_size[0])-5, (400-qr_size[1])-5, 5)
-
 # 画像に文字を入れる関数
 def img_add_msg(img, message):
+
+    # テキストの描画位置を指定
+    text_x, text_y = 20, 90
+    # フォントの指定
     font24 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 24)
     img = Image.fromarray(img)                          # cv2(NumPy)型の画像をPIL型に変換
     draw = ImageDraw.Draw(img)                          # 描画用のDraw関数を用意
- 
-    # テキストを描画（位置、文章、フォント、文字色（BGR+α）を指定）
-    draw.text((10, 10), message, font=font24, fill=(0, 0, 0, 0))
+    
+    # 改行する文字数
+    n = 24
+    lines = ['']
+    line_no = 0
+    for word in message:
+        if len(lines[line_no]) + len(word) > n:
+            line_no += 1
+            lines.append('')
+        lines[line_no] += ' ' + word
+    # 1行ずつテキストを描画
+
+    for line in lines:
+        # テキストの描画位置を指定
+        org = (text_x, text_y)
+        # テキストを描画
+        # cv2.putText(img, line, org, cv2.FONT_HERSHEY_SIMPLEX, font_size, text_color, thickness)
+        # テキストを描画（位置、文章、フォント、文字色（BGR+α）を指定）
+        draw.text(org, line, font=font24, fill=(0, 0, 0, 0))
+        # 行間を開ける
+        text_y += int(24 * 1.2)
+    
     img = np.array(img)                                 # PIL型の画像をcv2(NumPy)型に変換
-    return img                                          # 文字入りの画像をリターン
+    return img  
 
-def qr_create(address):
-    qr = qrcode.QRCode(
-        version=1,
-        error_correction=qrcode.constants.ERROR_CORRECT_L,
-        box_size=10,
-        border=4,
-    )
+# 画像の読み込み
+img = cv2.imread(os.path.join(picdir, 'message_background.bmp'))
 
-    qr.add_data(address)
-    qr.make(fit=True)
+# QRコードの生成
+qr = qrcode.QRCode(version=1, box_size=3, border=2)
+qr.add_data(address)
+qr.make(fit=True)
+qr_img = qr.make_image(fill_color="black", back_color="white")
+qr_img = np.array(qr_img.getdata(), dtype=np.uint8).reshape(qr_img.size[1], qr_img.size[0])
+qr_img = cv2.cvtColor(qr_img, cv2.COLOR_GRAY2BGR)
+qr_width, qr_height = qr_img.shape[:2]
 
-    img = qr.make_image(fill_color="black", back_coler="white")
-    resized = img.resize(qr_size)
-    resized.save(os.path.join(picdir) + "/qrcode.bmp")
+# QRコードの配置
+qr_x = img.shape[1] - qr_width - 10
+qr_y = 10
+img[qr_y:qr_y+qr_height, qr_x:qr_x+qr_width] = qr_img
+
+# 画像に文字を入れる関数を実行
+out_put = img_add_msg(img, text)
+
+# 画像の保存
+cv2.imwrite(os.path.join(picdir, 'output.bmp'), out_put)
 
 # アニメーション
 for item in images:
     epd.show_image(item)
-    time.sleep(1)
+    time.sleep(0.5)
 
+# 音声の再生
 subprocess.Popen(['mpg321', os.path.join(voicedir) + '/level_up.mp3'])
 
-# アドレスQRの生成
-qr_put = qr_create(address)
-
-qr_img = cv2.imread(os.path.join(picdir, 'qrcode.bmp'), 1)  #QRコード画像読み込み
-
-# 画像の大きさを変更
-resize_qr = cv2.copyMakeBorder(qr_img, image_size[0], image_size[1], image_size[2], image_size[3], cv2.BORDER_CONSTANT, value=(255, 255, 255))
-
-# 画像に文字を入れる関数を実行
-out_put = img_add_msg(resize_qr, message)
-
-# 画像出力
-cv2.imwrite(os.path.join(picdir, 'output.bmp'), out_put) 
-
+# 最終画像の表示
 epd.show_image('output.bmp')
 # time.sleep(2)
 # epd.display_clear()
