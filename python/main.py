@@ -37,7 +37,7 @@ address = args[2]
 def img_add_msg(img, message):
 
     # テキストの描画位置を指定
-    text_x, text_y = 20, 90
+    text_x, text_y = 20, 100
     # フォントの指定
     font24 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 24)
     img = Image.fromarray(img)                          # cv2(NumPy)型の画像をPIL型に変換
@@ -71,7 +71,7 @@ def img_add_msg(img, message):
 img = cv2.imread(os.path.join(picdir, 'message_background.bmp'))
 
 # QRコードの生成
-qr = qrcode.QRCode(version=1, box_size=3, border=2)
+qr = qrcode.QRCode(version=1, box_size=2, border=2)
 qr.add_data(address)
 qr.make(fit=True)
 qr_img = qr.make_image(fill_color="black", back_color="white")
