@@ -7,6 +7,8 @@ import { Account, Address, RepositoryFactoryHttp, NetworkType, TransactionReposi
 import {IncomingWebhook } from '@slack/webhook';
 import { Display } from './display';
 
+const display = new Display();
+
 let txRepo: TransactionRepository;
 
 interface Status {
@@ -62,82 +64,69 @@ const listenerNewBlock = ():void => {
   setTimeout(listenerNewBlock, 50000);
 }
 
-// const newBlock = (block:any):void => {
-//   console.log(block);
-//   if(!status.loading){
-//     python_call("message", targetAddress);
-//   }
-// }
+const getTransfers = async (tx:any) => {
+  //@ts-ignore
+  await parseTxs(tx);
+}
 
-// const getTransfers = async (block:any) => {
-//   try {
-//     const tx = await txRepo.search({
-//       height: block.height.compact(),
-//       group: TransactionGroup.Confirmed
-//     }).toPromise();
-//     //@ts-ignore
-//     log('tx: '+tx.data.length);
-//     //@ts-ignore
-//     await parseTxs(tx.data);
-//   } catch (error) {
-//     console.error(error);
-//   }
-// }
-
-// const parseTxs = async (txs:Array<Transaction>) => {
-//   for(const tx of txs){
-//     //アグリゲートトランザクション判定
-//     if(tx.type === TransactionType.AGGREGATE_COMPLETE || tx.type === TransactionType.AGGREGATE_BONDED){
-//       //アグリゲートの場合、内部トランザクションを再取得
-//       const reTx = await txRepo.getTransaction(
-//         tx.transactionInfo.hash,
-//         TransactionGroup.Confirmed
-//       ).toPromise();
-//       console.log("== aggregateTx ==")
-//       //この関数を再帰的に呼び出し
-//       parseTxs(reTx.innerTransactions);  //再帰呼び出し
-//       console.log("-----------------")
-//     }else {
-//       log("== tx ==");
-//       log(tx);
-//       // if(tx.mosaics !== undefined){
-//       //   tx.mosaics.forEach(mosaic => {
-//       //     log(mosaic);
-//       //   });
-//       // }
-//     }
-//   }
-// }
+const parseTxs = async (txs:any) => {
+  for(const tx of txs){
+    //アグリゲートトランザクション判定
+    if(tx.type === TransactionType.AGGREGATE_COMPLETE || tx.type === TransactionType.AGGREGATE_BONDED){
+      //アグリゲートの場合、内部トランザクションを再取得
+      const reTx:any = await txRepo.getTransaction(
+        tx.transactionInfo.hash,
+        TransactionGroup.Confirmed
+      ).toPromise();
+      console.log("== aggregateTx ==")
+      //この関数を再帰的に呼び出し
+      parseTxs(reTx.innerTransactions);  //再帰呼び出し
+      console.log("-----------------")
+    }else {
+      log("== tx ==");
+      if(tx.recipientAddress.plain() === account.address.plain()){
+        log(tx.signer.address.plain());
+          display.call(tx.message.payload, tx.signer.address);
+      }
+    }
+  }
+}
 
 (async()=>{
 
+  console.log("start");
+
   const node = await getActiveNode(network_type);
+  console.log(node);
+  
   const repo = new RepositoryFactoryHttp(node);
   txRepo = repo.createTransactionRepository();
-  const display = new Display();
 
-  if(!display.status){
-    display.call("on loading", account.address);
-  }
+  // if(!display.status){
+  //   display.call("on loading", account.address);
+  // }
 
-  // // リスナー生成
-  // listener = repo.createListener();
-  // // リスナーオープン
-  // listener.open().then(() => {
-  //   log('listner open')
-  //   listener.newBlock().subscribe((block:any) => {
-  //     getTransfers(block);
-  //   });
+  // リスナー生成
+  listener = repo.createListener();
 
-  //   listener.webSocket.onclose = function(){
-  //     console.log("listener onclose");
-  //     if(webhook_url){
-  //       const webhook = new IncomingWebhook(webhook_url);
-  //       webhook.send({
-  //         text: "listener onclose",
-  //       });
-  //     }
-  //   }
-  //   listenerNewBlock();
-  // });
+  // リスナーオープン
+  listener.open().then(() => {
+    log('listner open')
+    //承認トランザクションの検知
+    listener.confirmed(account.address).subscribe((tx) => {
+      // log(tx);
+      getTransfers([tx]);
+    });
+
+    listener.webSocket.onclose = function(){
+      console.log("listener onclose");
+      if(webhook_url){
+        const webhook = new IncomingWebhook(webhook_url);
+        webhook.send({
+          text: "listener onclose",
+        });
+      }
+    }
+    listenerNewBlock();
+  });
 })()
