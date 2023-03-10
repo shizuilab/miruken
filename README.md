@@ -53,6 +53,14 @@ gpio -v
 
 raspi-gpio get
 raspi-gpio get 6 | awk -v RS=" " -F "=" -v k="level" '$1==k {print $2}'
+
+# install Python3 libraries
+sudo apt-get update
+sudo apt-get install python3-pip
+sudo apt-get install python3-pil
+sudo apt-get install python3-numpy
+sudo pip3 install RPi.GPIO
+sudo pip3 install spidev
 ```
 
 # Nodejsインストール
@@ -84,9 +92,21 @@ node -v
 npm -v
 ```
 
-## pythonライブラリインストール
+foreverインストール
 
 ```
-cd python
-pip install -r requirements.txt
+sudo npm install -g forever
+```
+
+## 使用方法
+
+
+```
+cd /home/pi/miruken/nodejs
+
+# プログラムのビルド
+npm run build
+
+#foreverにより永続化
+forever start dist/main.js
 ```

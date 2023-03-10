@@ -105,7 +105,8 @@ const parseTxs = async (txs:any) => {
   txRepo = repo.createTransactionRepository();
 
   // if(!display.status){
-  //   display.call("on loading", account.address);
+  //   // @ts-ignore
+  //   display.call("hi!", account.address);
   // }
 
   // リスナー生成

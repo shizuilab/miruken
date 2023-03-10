@@ -2,6 +2,7 @@
 # -*- coding:utf-8 -*-
 import os
 import subprocess
+import tweet_bot as tweetbot
 
 picdir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'pic')
 voicedir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'voice')
@@ -99,6 +100,8 @@ for item in images:
 subprocess.Popen(['mpg321', os.path.join(voicedir) + '/level_up.mp3'])
 
 # 最終画像の表示
-epd.show_image('output.bmp')
+epd.show_image('output.jpg')
+
+tweetbot.post()
 # time.sleep(2)
 # epd.display_clear()
