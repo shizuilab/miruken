@@ -1,8 +1,26 @@
 # Ｍｉｒｕｋｅｎ（ミルケン）
 
-# 環境構築
+# 概要
 
-以下の環境にて構築
+ラズパイでトランザクションを検知する。
+
+トランザクションのメッセージをE-Paper上に表示する。
+
+## なぜ作ったか
+
+トランザクションの通知だけであればスマホで事足りるが、なぜわざわざHWを作ったかと言うと、楽しそうだったから（笑）
+
+というのは冗談で（半分以上は本気）、スマホの通知は日常生活のなかで埋もれがちになる。
+
+人は情報が多いと不要だと思うのもを遮断する生き物である（持論）
+
+あえて飾り物として常時決まった場所においておくことにより、時計やカレンダーの様に常に気にかける存在としてなり得るのでは無いかと思ったためである。
+
+情報過多なこの時代にアナログチックなものをコネクトしたかったのである。
+
+また、メッセージに指令を込め、様々なHWやリソースとコネクトすることを最終目的として制作している。
+
+# 実行環境
 
 ```
 PRETTY_NAME="Raspbian GNU/Linux 11 (bullseye)"
@@ -17,7 +35,9 @@ SUPPORT_URL="http://www.raspbian.org/RaspbianForums"
 BUG_REPORT_URL="http://www.raspbian.org/RaspbianBugs"
 ```
 
-# 音声ツールのインストール
+# 環境構築
+
+## 音声ツールのインストール
 
 ```
 sudo apt update
@@ -25,14 +45,14 @@ sudo apt install mpg321
 
 ```
 
-# SPIを有効にする
+## SPIを有効にする
 
 ```
 sudo raspi-config
 sudo reboot
 ```
 
-# 電子ペーパーを制御するためのツールインストール
+## 電子ペーパーを制御するためのツールインストール
 
 ```
 wget http://www.airspayce.com/mikem/bcm2835/bcm2835-1.60.tar.gz
@@ -59,11 +79,9 @@ sudo apt-get update
 sudo apt-get install python3-pip
 sudo apt-get install python3-pil
 sudo apt-get install python3-numpy
-sudo pip3 install RPi.GPIO
-sudo pip3 install spidev
 ```
 
-# Nodejsインストール
+## Nodejsインストール
 
 ```
 sudo apt-get install nodejs npm
@@ -98,8 +116,47 @@ foreverインストール
 sudo npm install -g forever
 ```
 
-## 使用方法
+# インストール
 
+## pip3 ライブラリのインストール
+
+```
+cd miruken/python
+pip3 install -r requirements.txt
+```
+## npm ライブラリのインストール
+
+```
+cd miruken/node
+npm install
+```
+
+## .envの設定
+
+*python/.env*
+
+```
+# Twitter投稿用の設定
+# TwitterAPIより取得して設定してください
+CONSUMER_KEY=
+CONSUMER_SECRET=
+ACCESS_TOKEN=
+ACCESS_TOKEN_SECRET=
+```
+
+*nodejs/.env*
+
+```
+# Symbolネットワーク設定 testnet or mainnet
+NETWORK_TYPE=testnet
+# SlackWebHookURL
+SLACK_WEBHOOK_URL=
+# 受信するアカウントのプライベートキー
+PRIVATE_KEY=
+```
+※プライベートキーにしているのは今後の開発を見据えてのこと
+
+# 使用方法
 
 ```
 cd /home/pi/miruken/nodejs
@@ -107,6 +164,64 @@ cd /home/pi/miruken/nodejs
 # プログラムのビルド
 npm run build
 
-#foreverにより永続化
+# 実行
+node dist/main.js
+
+# foreverにより永続化することも可能
 forever start dist/main.js
 ```
+
+# 部品
+
+必須
+- [電子ペーパー](https://amzn.to/3FtWSqU)
+- [ラズベリーパイ](https://amzn.to/3FtWSqU)（試してないが3とかでもOKなはず）
+
+オプション(普通にスピーカー繋ぐなら不要)
+- [ミニブレッドボード　ＢＢ－６０１（白）](https://akizukidenshi.com/catalog/g/gP-05155/)
+- [ＰＡＭ８０１２使用２ワットＤ級アンプモジュール](https://akizukidenshi.com/catalog/g/gK-08217/)
+- [３．５ｍｍステレオミニジャックＤＩＰ化キット](https://akizukidenshi.com/catalog/g/gK-05363/)
+- [ブレッドボード用ダイナミックスピーカー](https://akizukidenshi.com/catalog/g/gP-12587/)
+- [小型ボリューム　１ＫΩＢ](https://akizukidenshi.com/catalog/g/gP-15812/)
+- [小型ボリューム用ツマミ（ノブ）　１５ｍｍ　ＡＢＳ－２８](https://akizukidenshi.com/catalog/g/gP-00253/)
+
+# 配線
+
+**GPIO接続**
+
+| e-Paper | Raspberry Pi |
+| --- | --- |
+| VCC | 1番ピン（3.3V） |
+| GND | 6番ピン（GND） |
+| DIN | 19番ピン（MOSI） |
+| CLK | 23番ピン（SCLK） |
+| CS | 24番ピン（CE0） |
+| DC | 25番ピン（GPIO） |
+| RST | 17番ピン（GPIO） |
+| BUSY | 24番ピン（GPIO） |
+
+# 動作イメージ
+
+## 実際の動きを確認する動画は[こちら](https://user-images.githubusercontent.com/98736633/226517356-089d1c30-fa14-41dd-b3b4-a71f65fdc6ef.mp4)をクリック
+
+作成物イメージ
+
+![PXL_20230321_042542649](https://user-images.githubusercontent.com/98736633/226517377-8f3a3e37-f95e-4dcb-95ee-a7a14c8f1587.jpg)
+
+
+![PXL_20230225_093345947](https://user-images.githubusercontent.com/98736633/226517387-c98a0a82-b89a-4d66-b6a8-b95f653b602f.jpg)
+
+
+![PXL_20230225_093349240](https://user-images.githubusercontent.com/98736633/226517397-a2e93d74-5ba4-4814-bab0-b0251a4c0021.jpg)
+
+
+![PXL_20230225_093352699](https://user-images.githubusercontent.com/98736633/226517405-4344c69a-822b-4cfb-867c-d88a0f263272.jpg)
+
+
+# 現在の監視アドレス
+
+**NAKSFNW3VT45NEPU7NF4BVKCKKKXCNDQ3L22BZI**
+
+こちらのアドレスにメッセージを投げるとmirukenに表示されます。
+また、動作がわかりにくいのでTwitterにも生成したメッセージ画像を投稿しています。
+➾[BotXym](https://twitter.com/BotXym)
