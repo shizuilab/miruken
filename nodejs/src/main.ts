@@ -8,7 +8,7 @@ import {IncomingWebhook } from '@slack/webhook';
 import { Display } from './display';
 
 const display = new Display();
-const exprolerUrl = process.env.EXPLORER_URL ?? 'https://testnet.symbol.fyi/';
+const exprolerUrl = process.env.EXPLORER_URL ?? 'https://testnet.symbol.fyi';
 
 let txRepo: TransactionRepository;
 
@@ -79,10 +79,10 @@ const parseTxs = async (txs:any) => {
         tx.transactionInfo.hash,
         TransactionGroup.Confirmed
       ).toPromise();
-      console.log("== aggregateTx ==")
+      log("== aggregateTx ==")
       //この関数を再帰的に呼び出し
       parseTxs(reTx.innerTransactions);  //再帰呼び出し
-      console.log("-----------------")
+      log("-----------------")
     }else {
       log("== tx ==");
       if(tx.recipientAddress.plain() === account.address.plain()){
@@ -96,10 +96,10 @@ const parseTxs = async (txs:any) => {
 
 (async()=>{
 
-  console.log("start");
+  log("start");
 
   const node = await getActiveNode(network_type);
-  console.log(node);
+  log(node);
   
   const repo = new RepositoryFactoryHttp(node);
   txRepo = repo.createTransactionRepository();
@@ -122,7 +122,7 @@ const parseTxs = async (txs:any) => {
     });
 
     listener.webSocket.onclose = function(){
-      console.log("listener onclose");
+      log("listener onclose");
       if(webhook_url){
         const webhook = new IncomingWebhook(webhook_url);
         webhook.send({
