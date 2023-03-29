@@ -232,7 +232,7 @@ forever start dist/main.js
 | CS | 24番ピン（CE0） |
 | DC | 25番ピン（GPIO） |
 | RST | 17番ピン（GPIO） |
-| BUSY | 24番ピン（GPIO） |
+| BUSY | 18番ピン（GPIO） |
 
 # 動作イメージ
 
