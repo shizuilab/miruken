@@ -117,32 +117,15 @@ sudo apt-get install python3-numpy
 
 ## Nodejsインストール
 
+### nvmを入れる
 ```
-sudo apt-get install nodejs npm
-```
-
-## nインストール
-
-```
-sudo npm install -g n
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
 ```
 
-## apt-getで入れたnodejsをアンインストール
-
 ```
-sudo apt-get remove nodejs npm
+nvm install 18
 ```
-
-## バージョンを指定してnodejsをインストール
-
-```
-sudo n 18
-
-sudo reboot
-
-node -v
-npm -v
-```
+※nvmが見つからないときはreboot
 
 foreverインストール
 
