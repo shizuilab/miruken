@@ -209,7 +209,7 @@ forever start dist/main.js
 
 必須
 - [電子ペーパー](https://amzn.to/3FtWSqU)
-- [ラズベリーパイ](https://amzn.to/3FtWSqU)（試してないが3とかでもOKなはず）
+- [ラズベリーパイ](https://amzn.to/3FXrEs8)（試してないが3とかでもOKなはず）
 
 オプション(普通にスピーカー繋ぐなら不要)
 - [ミニブレッドボード　ＢＢ－６０１（白）](https://akizukidenshi.com/catalog/g/gP-05155/)
