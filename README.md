@@ -210,12 +210,12 @@ forever start dist/main.js
 | --- | --- |
 | VCC | 1番ピン（3.3V） |
 | GND | 6番ピン（GND） |
-| DIN | 19番ピン（MOSI） |
-| CLK | 23番ピン（SCLK） |
-| CS | 24番ピン（CE0） |
-| DC | 25番ピン（GPIO） |
-| RST | 17番ピン（GPIO） |
-| BUSY | 18番ピン（GPIO） |
+| DIN | 19番ピン（GPIO9） |
+| CLK | 23番ピン（GPIO11） |
+| CS | 24番ピン（GPIO8） |
+| DC | 22番ピン（GPIO25） |
+| RST | 11番ピン（GPIO17） |
+| BUSY | 18番ピン（GPIO24） |
 
 # 動作イメージ
 
