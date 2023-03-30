@@ -117,7 +117,46 @@ sudo apt-get install python3-numpy
 
 ## Nodejsインストール
 
-### nvmを入れる
+ラズパイzero w nodejsを使う場合は普通にインストールするとv10.24.1がインストールされるので下記を使用する
+
+https://github.com/tj/n#custom-source
+
+
+```
+$ N_NODE_MIRROR=https://unofficial-builds.nodejs.org/download/release/ n ls-remote
+Listing remote... Displaying 20 matches (use --all to see all).
+19.8.1
+19.7.0
+19.6.1
+19.6.0
+19.5.0
+19.4.0
+19.3.0
+19.2.0
+...
+```
+
+nをグローバルインストール
+
+```
+npm install -g n
+```
+
+
+.bashrcに書きを追記
+
+```
+export N_NODE_MIRROR=https://unofficial-builds.nodejs.org/download/release/
+export N_PREFIX="$HOME/.n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"  # Added by n-install (see http://git.io/n-install-repo).
+```
+
+.bashrcを再読み込み
+
+```
+n lts
+```
+
+### nvmを入れる（raspi zero wでは失敗する）
 ```
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
 ```
