@@ -149,6 +149,11 @@ sudo npm install -g forever
 cd miruken/python
 pip3 install -r requirements.txt
 ```
+No matching distribution found for gyp==0.1 (requirement.txtから取り除いて実行）
+実行するとcv2がないといわれたのでインストール
+pip3 install opencv-python
+pip3 install opencv-contrib-python
+
 ## npm ライブラリのインストール
 
 ```
@@ -159,6 +164,8 @@ npm install
 ## .envの設定
 
 *python/.env*
+
+cp .env_sample .envのみ
 
 ```
 # Twitter投稿用の設定
@@ -199,8 +206,9 @@ forever start dist/main.js
 # 部品
 
 必須
-- [電子ペーパー](https://amzn.to/3FtWSqU)
-- [ラズベリーパイ](https://amzn.to/3FXrEs8)（試してないが3とかでもOKなはず）
+- [電子ペーパー](https://amzn.to/3FtWSqU)-> (https://www.amazon.co.jp/gp/product/B07BY38BFG)
+- マニュアルページ：https://www.waveshare.com/wiki/2.7inch_e-Paper_HAT_Manual#Working_With_Raspberry_Pi
+- [ラズベリーパイ](https://amzn.to/3FXrEs8)（試してないが3Bです）
 
 オプション(普通にスピーカー繋ぐなら不要)
 - [ミニブレッドボード　ＢＢ－６０１（白）](https://akizukidenshi.com/catalog/g/gP-05155/)
