@@ -124,7 +124,7 @@ sudo curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
 sudo apt-get install -y nodejs
 sudo npm install -g npm@latest
 
-===(以下飛ばした）　　===
+===(以下使用せず）　　===
 
 ### nvmを入れる
 ```
@@ -152,14 +152,14 @@ sudo npm install -g forever
 cd miruken/python
 pip3 install -r requirements.txt
 ```
-エラー対応  
-- No matching distribution found for gyp==0.1　 
-requirement.txtから取り除いて実行　  
+エラー対応　　
+- No matching distribution found for gyp==0.1　　
+requirement.txtから取り除いて実行　　　
 
-- 実行するとcv2がないといわれたのでインストール　 
-参考：https://python-academia.com/raspberrypi-opencv/　 
-pip3 install opencv-python　 
-pip3 install opencv-contrib-python　（時間がすごくかかる）　 
+- 実行するとcv2がないといわれたのでインストール　　
+参考：https://python-academia.com/raspberrypi-opencv/　　
+pip3 install opencv-python　　
+pip3 install opencv-contrib-python　（時間がすごくかかる）　　
 
 ## npm ライブラリのインストール
 
