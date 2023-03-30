@@ -48,12 +48,12 @@ def img_add_msg(img, message):
     # テキストの描画位置を指定
     text_x, text_y = 10, 48
     # フォントの指定
-    font24 = ImageFont.truetype(os.path.join(picdir, 'Font.ttc'), 24)
+    font20 = ImageFont.truetype(os.path.join(picdir, 'NotoSansCJK-Regular.ttc'), 20)
     img = Image.fromarray(img)                          # cv2(NumPy)型の画像をPIL型に変換
     draw = ImageDraw.Draw(img)                          # 描画用のDraw関数を用意
 
     # 改行する文字数
-    n = 16
+    n = 20
     lines = ['']
     line_no = 0
     for word in message:
@@ -69,9 +69,9 @@ def img_add_msg(img, message):
         # テキストを描画
         # cv2.putText(img, line, org, cv2.FONT_HERSHEY_SIMPLEX, font_size, text_color, thickness)
         # テキストを描画（位置、文章、フォント、文字色（BGR+α）を指定）
-        draw.text(org, line, font=font24, fill=(0, 0, 0, 0))
+        draw.text(org, line, font=font20, fill=(0, 0, 0, 0))
         # 行間を開ける
-        text_y += int(24 * 1.2)
+        text_y += int(20 * 1.2)
 
     img = np.array(img)                                 # PIL型の画像をcv2(NumPy)型に変換
     return img

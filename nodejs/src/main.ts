@@ -2,7 +2,7 @@ require('dotenv').config();
 const log4js = require('log4js');
 const logger = log4js.getLogger('system');
 
-import { getActiveNode } from 'symbol-node-util';
+//import { getActiveNode } from 'symbol-node-util';
 import { Account, Address, RepositoryFactoryHttp, NetworkType, TransactionRepository, TransactionType, TransactionGroup, Transaction } from "symbol-sdk";
 import {IncomingWebhook } from '@slack/webhook';
 import { Display } from './display';
@@ -98,7 +98,8 @@ const parseTxs = async (txs:any) => {
 
   log("start");
 
-  const node = await getActiveNode(network_type);
+  const node = "http://dhealth.shizuilab.com:3000";
+  // const node = await getActiveNode(network_type);
   log(node);
   
   const repo = new RepositoryFactoryHttp(node);
