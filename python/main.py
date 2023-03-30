@@ -38,6 +38,9 @@ args = sys.argv
 text = args[1]
 print (text)
 
+# 音声の再生
+subprocess.Popen(['mpg321', os.path.join(voicedir) + '/src_views_resources_audio_ding.mp3'])
+
 # QRコードに表示するアドレス
 address = args[2]
 print (address)
@@ -108,7 +111,7 @@ for item in images:
     time.sleep(0.5)
 
 # 音声の再生
-subprocess.Popen(['mpg321', os.path.join(voicedir) + '/level_up.mp3'])
+subprocess.Popen(['mpg321', os.path.join(voicedir) + '/src_views_resources_audio_ding2.mp3'])
 
 # 最終画像の表示
 Himage = Image.open(os.path.join(picdir, 'output.bmp'))
