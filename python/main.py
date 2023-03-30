@@ -49,7 +49,7 @@ print (address)
 def img_add_msg(img, message):
 
     # テキストの描画位置を指定
-    text_x, text_y = 10, 48
+    text_x, text_y = 10, 40
     # フォントの指定
     font20 = ImageFont.truetype(os.path.join(picdir, 'NotoSansCJK-Regular.ttc'), 20)
     img = Image.fromarray(img)                          # cv2(NumPy)型の画像をPIL型に変換
