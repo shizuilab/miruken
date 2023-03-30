@@ -108,7 +108,8 @@ gpio -v
 #wingpiは非推奨になったので下記を実行 参考：https://qiita.com/ma2shita/items/b11045717333bcd79d15
 
 raspi-gpio get
-raspi-gpio get 6 | awk -v RS=" " -F "=" -v k="level" '$1==k {print $2}'
+raspi-gpio get 6 | awk -v RS=" " -F "=" -v k="level" '$1==k {print $2}'　
+1が返ってきた　
 
 # install Python3 libraries
 sudo apt-get update
