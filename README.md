@@ -154,13 +154,13 @@ pip3 install -r requirements.txt
 ```
 エラー対応　　
 - No matching distribution found for gyp==0.1　　
-requirement.txtから取り除いて実行　　　
+-　requirement.txtから取り除いて実行　　　
 
-- 実行するとcv2がないといわれたのでインストール　　
-参考：https://python-academia.com/raspberrypi-opencv/　　
-pip3 install opencv-python　　
-pip3 install opencv-contrib-python　（時間がすごくかかる）　　
-
+- 実行するとcv2がないといわれたのでインストール　　参考：https://python-academia.com/raspberrypi-opencv/　　
+```
+pip3 install opencv-python
+pip3 install opencv-contrib-python　（時間がすごくかかる）
+```
 ## npm ライブラリのインストール
 
 ```
