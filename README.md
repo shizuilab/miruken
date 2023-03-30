@@ -78,7 +78,6 @@ BUG_REPORT_URL="http://www.raspbian.org/RaspbianBugs"
 ```
 sudo apt update
 sudo apt install mpg321
-
 ```
 
 ## SPIを有効にする
@@ -158,8 +157,10 @@ pip3 install -r requirements.txt
 
 - 実行するとcv2がないといわれたのでインストール　　参考：https://python-academia.com/raspberrypi-opencv/　　
 ```
+sudo apt-get install libhdf5-dev libhdf5-serial-dev libhdf5-103
+sudo apt-get install libatlas-base-dev
+sudo apt-get install libjasper-dev
 pip3 install opencv-python
-pip3 install opencv-contrib-python　（時間がすごくかかる）
 ```
 ## npm ライブラリのインストール
 
