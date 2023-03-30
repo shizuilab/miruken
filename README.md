@@ -1,4 +1,4 @@
-# Ｍｉｒｕｋｅｎ（ミルケン）
+# Ｍｉｒｕｋｅｎ（ミルケン） ShizuiNet テストバージョン
 
 # 概要
 
@@ -97,7 +97,7 @@ sudo make
 sudo make check
 sudo make install
 
-#wingpiインストール
+#wingpiインストール（不可能でした）
 sudo apt-get install wiringpi
 wget https://project-downloads.drogon.net/wiringpi-latest.deb
 sudo dpkg -i wiringpi-latest.deb
@@ -117,6 +117,12 @@ sudo apt-get install python3-numpy
 
 ## Nodejsインストール
 
+sudo curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+sudo apt-get install -y nodejs
+sudo npm install -g npm@latest
+
+(以下使わず）
+
 ### nvmを入れる
 ```
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
@@ -125,7 +131,7 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
 ```
 nvm install 18
 ```
-※nvmが見つからないときはreboot
+※nvmが見つからないときはreboot（rebootしても見つからず）
 
 foreverインストール
 
