@@ -151,9 +151,9 @@ sudo npm install -g forever
 cd miruken/python
 pip3 install -r requirements.txt
 ```
-エラー対応　　
+## エラー対応　　
 - No matching distribution found for gyp==0.1　　
--　requirement.txtから取り除いて実行　　　
+- requirement.txtから取り除いて実行　　　
 
 - 実行するとcv2がないといわれたのでインストール　　参考：https://python-academia.com/raspberrypi-opencv/　　
 ```
@@ -172,7 +172,7 @@ npm install
 ## .envの設定
 
 *python/.env*
-
+```
 cp .env_sample .envのみ
 
 ```
