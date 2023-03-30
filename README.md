@@ -165,7 +165,7 @@ pip3 install opencv-python
 ## npm ライブラリのインストール
 
 ```
-cd miruken/node
+cd miruken/nodejs
 npm install
 ```
 
