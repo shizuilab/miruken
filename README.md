@@ -6,6 +6,8 @@
 
 トランザクションのメッセージをE-Paper上に表示する。
 
+ShizuiNetのトランザクション表示のために、小型e-PaperとdHealthを扱えるよう改造中
+
 ## なぜ作ったか
 
 トランザクションの通知だけであればスマホで事足りるが、なぜわざわざHWを作ったかと言うと、楽しそうだったから（笑）
@@ -149,10 +151,14 @@ sudo npm install -g forever
 cd miruken/python
 pip3 install -r requirements.txt
 ```
-No matching distribution found for gyp==0.1 (requirement.txtから取り除いて実行）
-実行するとcv2がないといわれたのでインストール
-pip3 install opencv-python
-pip3 install opencv-contrib-python
+エラー対応
+- No matching distribution found for gyp==0.1　
+requirement.txtから取り除いて実行　
+
+- 実行するとcv2がないといわれたのでインストール　
+参考：https://python-academia.com/raspberrypi-opencv/　
+pip3 install opencv-python　
+pip3 install opencv-contrib-python　（終わらない）　
 
 ## npm ライブラリのインストール
 
