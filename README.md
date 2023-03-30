@@ -118,11 +118,11 @@ sudo apt-get install python3-numpy
 ```
 
 ## Nodejsインストール
-
+```
 sudo curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
 sudo apt-get install -y nodejs
 sudo npm install -g npm@latest
-
+```
 ===(以下使用せず）　　===
 
 ### nvmを入れる
