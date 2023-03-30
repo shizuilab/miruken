@@ -133,6 +133,8 @@ nvm install 18
 ```
 ※nvmが見つからないときはreboot（rebootしても見つからず）
 
+（無視ここまで）
+
 foreverインストール
 
 ```
