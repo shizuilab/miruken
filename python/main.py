@@ -56,7 +56,11 @@ def img_add_msg(img, message):
     draw = ImageDraw.Draw(img)                          # 描画用のDraw関数を用意
 
     # 改行する文字数
-    n = 20
+    if len(message) != len(message.encode('utf-8')):
+        n = 12
+    else:
+        n = 20
+
     lines = ['']
     line_no = 0
     for word in message:
