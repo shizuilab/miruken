@@ -38,9 +38,6 @@ args = sys.argv
 text = args[1]
 print (text)
 
-# 音声の再生
-subprocess.Popen(['mpg321', os.path.join(voicedir) + '/src_views_resources_audio_ding.mp3'])
-
 # QRコードに表示するアドレス
 address = args[2]
 print (address)
@@ -105,6 +102,9 @@ out_put = img_add_msg(img, text)
 
 # 画像の保存
 cv2.imwrite(os.path.join(picdir, 'output.bmp'), out_put)
+
+# 音声の再生
+subprocess.Popen(['mpg321', os.path.join(voicedir) + '/src_views_resources_audio_ding.mp3'])
 
 # アニメーション
 for item in images:
