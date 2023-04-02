@@ -98,7 +98,7 @@ const parseTxs = async (txs:any) => {
 
   log("start");
 
-  const node = "http://dhealth.shizuilab.com:3000";
+  const node = "https://dhealth.shizuilab.com:3001";
   // const node = await getActiveNode(network_type);
   log(node);
   
