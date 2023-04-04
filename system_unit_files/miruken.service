@@ -1,0 +1,12 @@
+[Unit]
+Description = shizuinet miruken daemon
+After = network-online.target
+
+[Service]
+User=monipi
+WorkingDirectory=/home/monipi/miruken/nodejs/
+ExecStart = /usr/bin/node /home/monipi/miruken/nodejs/dist/main.js
+Type = simple
+
+[Install]
+WantedBy = network-online.target
