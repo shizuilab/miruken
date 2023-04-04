@@ -187,8 +187,8 @@ ACCESS_TOKEN_SECRET=
 *nodejs/.env*
 
 ```
-# Symbolネットワーク設定 testnet or mainnet
-NETWORK_TYPE=testnet
+# dHealth ネットワーク設定 mainnet
+NETWORK_TYPE=mainnet
 # SlackWebHookURL
 SLACK_WEBHOOK_URL=
 # 受信するアカウントのプライベートキー
