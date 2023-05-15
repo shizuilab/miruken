@@ -3,6 +3,7 @@
 # 現在は2.13inchのe-Paperに対応中
 # その他のサイズのe-Paperに対応させるには、miruken/python/lib/の中の対応する物を使うこと
 # e-Paperのサイズに応じて、そのサイズおスプラッシュ画像、ブランク画像、長辺x長辺の背景画像を用意すること
+# アニメーションを省いて高速化
 
 import sys
 import os
@@ -136,22 +137,22 @@ cv2.imwrite(os.path.join(picdir, 'output.bmp'), out_put)
 
 # 音声の再生
 subprocess.Popen(['mpg321', os.path.join(voicedir) + '/src_views_resources_audio_ding.mp3'])
-
+epd.init()
 # アニメーション
-for item in images:
-    epd.init()
-    # epd.Clear(0xFF)
-    Himage = Image.open(os.path.join(picdir, item))
-    epd.display(epd.getbuffer(Himage))
-    time.sleep(0.5)
-
-# 音声の再生
-subprocess.Popen(['mpg321', os.path.join(voicedir) + '/src_views_resources_audio_ding2.mp3'])
+#for item in images:
+#    epd.init()
+#    # epd.Clear(0xFF)
+#    Himage = Image.open(os.path.join(picdir, item))
+#    epd.display(epd.getbuffer(Himage))
+#    time.sleep(0.5)
 
 # 最終画像の表示
 Himage = Image.open(os.path.join(picdir, 'output.bmp'))
 epd.display(epd.getbuffer(Himage))
-time.sleep(2)
+time.sleep(1)
+
+# 音声の再生
+subprocess.Popen(['mpg321', os.path.join(voicedir) + '/src_views_resources_audio_ding2.mp3'])
 
 # Clear and Sleep
 # epd.Clear(0xFF)
