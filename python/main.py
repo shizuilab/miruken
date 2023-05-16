@@ -137,7 +137,7 @@ cv2.imwrite(os.path.join(picdir, 'output.bmp'), out_put[0:250, 64:186])
 
 # 最終画像の表示
 epd.init()
-epd.Clear(0xFF)
+# epd.Clear(0xFF)
 Himage = Image.open(os.path.join(picdir, 'output.bmp'))
 epd.display(epd.getbuffer(Himage))
 time.sleep(2)
