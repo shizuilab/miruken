@@ -74,7 +74,7 @@ const log = (obj: any):void => {
 
 const listenerNewBlock = ():void => {
   listener.newBlock();
-  setTimeout(listenerNewBlock, 50000);
+  setTimeout(listenerNewBlock, 60000);
 }
 
 const getTransfers = async (tx:any, idx:number) => {
