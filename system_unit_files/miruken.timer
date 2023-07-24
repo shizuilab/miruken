@@ -1,0 +1,12 @@
+[Unit]
+Description=Runs miruken.service
+
+[Timer]
+# ブート後、この時間後にこのタイマーを開始する
+OnBootSec=15sec
+# 実行する時間の間隔
+OnUnitActiveSec=10sec
+Unit=miruken.service
+
+[Install]
+WantedBy=multi-user.target

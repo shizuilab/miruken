@@ -2,6 +2,8 @@ require('dotenv').config();
 const log4js = require('log4js');
 const logger = log4js.getLogger('system');
 
+const sleep = msec => new Promise(resolve => setTimeout(resolve, msec));
+
 //import { getActiveNode } from 'symbol-node-util';
 import { Account, Address, RepositoryFactoryHttp, NetworkType, TransactionRepository, TransactionType, TransactionGroup, Transaction } from "symbol-sdk";
 import {IncomingWebhook } from '@slack/webhook';
@@ -50,7 +52,17 @@ let network_type: number = NetworkType.TEST_NET;
 if(process.env.NETWORK_TYPE === 'mainnet'){
   network_type = NetworkType.MAIN_NET;
 }
-const account: Account = Account.createFromPrivateKey(process.env.PRIVATE_KEY ?? '', network_type);
+
+// const account: Account = Account.createFromPrivateKey(process.env.PRIVATE_KEY ?? '', network_type);
+// type ACCOUNT_PKEYS = string[];
+const accounts: Account[] = [Account.createFromPrivateKey(process.env.ACCOUNT_PKEY_1 ?? '', network_type),
+                             Account.createFromPrivateKey(process.env.ACCOUNT_PKEY_2 ?? '', network_type),
+                             Account.createFromPrivateKey(process.env.ACCOUNT_PKEY_3 ?? '', network_type),
+                             Account.createFromPrivateKey(process.env.ACCOUNT_PKEY_4 ?? '', network_type),
+                             Account.createFromPrivateKey(process.env.ACCOUNT_PKEY_5 ?? '', network_type),
+                             ];
+// ['NCQRNQBQOIRWJM6MUK2D4SFD55EV46YYNBNYM2A','NBMOXYQPCL72TAB4NEZZ7PBKPU6NCKZKZ34OI3Y','NAUSWZ5BFBBVPR65TRASFRZKTR5Q5BEHCEG34LA','NBZ5FVEAIPBZFQT23C52TXBLYJMQKTPW633EKJQ','NAUSWZ5BFBBVPR65TRASFRZKTR5Q5BEHCEG34LA'];
+console.log (accounts);
 
 /**
   * ログ
@@ -65,12 +77,12 @@ const listenerNewBlock = ():void => {
   setTimeout(listenerNewBlock, 60000);
 }
 
-const getTransfers = async (tx:any) => {
+const getTransfers = async (tx:any, idx:number) => {
   //@ts-ignore
-  await parseTxs(tx);
+  await parseTxs(tx, idx);
 }
 
-const parseTxs = async (txs:any) => {
+const parseTxs = async (txs:any, idx:number) => {
   for(const tx of txs){
     //アグリゲートトランザクション判定
     if(tx.type === TransactionType.AGGREGATE_COMPLETE || tx.type === TransactionType.AGGREGATE_BONDED){
@@ -81,11 +93,11 @@ const parseTxs = async (txs:any) => {
       ).toPromise();
       log("== aggregateTx ==")
       //この関数を再帰的に呼び出し
-      parseTxs(reTx.innerTransactions);  //再帰呼び出し
+      parseTxs(reTx.innerTransactions, idx);  //再帰呼び出し
       log("-----------------")
     }else {
       log("== tx ==");
-      if(tx.recipientAddress.plain() === account.address.plain()){
+      if(tx.recipientAddress.plain() === accounts[idx].address.plain()){
         // log(tx);
         const link = `${exprolerUrl}/transactions/${tx.transactionInfo.hash}`;
         display.call(tx.message.payload, link);
@@ -98,7 +110,7 @@ const parseTxs = async (txs:any) => {
 
   log("start");
 
-  const node = "https://dhealth.shizuilab.com:3001";
+  const node = "http://dual-01.dhealth.cloud:3000";
   // const node = await getActiveNode(network_type);
   log(node);
   
@@ -110,27 +122,23 @@ const parseTxs = async (txs:any) => {
   //   display.call("hi!", account.address);
   // }
 
-  // リスナー生成
-  listener = repo.createListener();
+  for (let index  = 0; index < accounts.length; index++) {
+    // リスナー生成
+    listener = repo.createListener();
 
-  // リスナーオープン
-  listener.open().then(() => {
-    log('listner open')
-    //承認トランザクションの検知
-    listener.confirmed(account.address).subscribe((tx) => {
-      // log(tx);
-      getTransfers([tx]);
-    });
+    // リスナーオープン
+    await listener.open().then(() => {
+      log('listner open')
+      //承認トランザクションの検知
+      listener.confirmed(accounts[index].address).subscribe((tx) => {
+        // log(tx);
+        getTransfers([tx],index);
+      });
 
-    listener.webSocket.onclose = function(){
-      log("listener onclose");
-      if(webhook_url){
-        const webhook = new IncomingWebhook(webhook_url);
-        webhook.send({
-          text: "listener onclose",
-        });
+      listener.webSocket.onclose = function(){
+        log("listener onclose");
       }
-    }
-    listenerNewBlock();
-  });
+      listenerNewBlock();
+    });
+  }
 })()
