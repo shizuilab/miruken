@@ -8,6 +8,7 @@
 # データベースから直近のデータを表示する
 # 音はなくす
 # rMQRコード対応
+# 文字数カウント日本語対応
 
 import sys
 import os
@@ -16,6 +17,7 @@ import sqlite3
 from rmqrcode import rMQR
 import rmqrcode
 from rmqrcode import QRImage
+import unicodedata
 
 explorerurl = "https://testnet.symbol.fyi"
 
@@ -57,6 +59,16 @@ print (text)
 address = explorerurl + "/transactions/" + lastdata[0][1]
 print (address)
 
+# 全角入りテキストの文字数カウント
+def get_east_asian_width_count(text):
+    count = 0
+    for c in text:
+        if unicodedata.east_asian_width(c) in 'FWA':
+            count += 2
+        else:
+            count += 1
+    return count
+
 # 画像に文字を入れる関数
 def img_add_msg(img, message):
 
@@ -69,27 +81,30 @@ def img_add_msg(img, message):
     draw = ImageDraw.Draw(img)                          # 描画用のDraw関数を用意
 
     # 改行する文字数
-    if len(message) != len(message.encode('utf-8')):
-        n = 9
-    else:
-        n = 18
+    maxlinebyte = 16
 
     lines = ['']
     line_no = 0
     for word in message:
-        if len(lines[line_no]) + len(word) > n:
+        bytecount = 0
+        if unicodedata.east_asian_width(word) in 'FWA':
+            bytecount = bytecount + 2
+        else:
+            bytecount = bytecount + 1
+
+        if get_east_asian_width_count(lines[line_no]) + bytecount > maxlinebyte:
             line_no += 1
             lines.append('')
         elif word == '>':
             line_no += 1
             lines.append('')
-            word = '->'
+            word = '>'
         elif word == ' ':
             line_no += 1
             lines.append('')
         lines[line_no] += word
-    # 1行ずつテキストを描画
 
+    # 1行ずつテキストを描画
     for line in lines:
         # テキストの描画位置を指定
         org = (text_x, text_y)
@@ -135,8 +150,8 @@ qr_width, qr_height = qr_img.size[0], qr_img.size[1]
 print(qr_width, qr_height)
 
 # QRコードの配置
-qr_x = img.shape[1] - qr_height - 10 #e-Paperごとに適合する位置に置き換える
-qr_y = img.shape[2] - qr_width - 10 #e-Paperごとに適合する位置に置き換える
+qr_x = img.shape[2] - qr_height - 20 #e-Paperごとに適合する位置に置き換える
+qr_y = img.shape[1] - qr_width - 20 #e-Paperごとに適合する位置に置き換える
 print(qr_x, qr_y)
 
 img[qr_x:qr_x+qr_height, qr_y:qr_y+qr_width] = qr_img
